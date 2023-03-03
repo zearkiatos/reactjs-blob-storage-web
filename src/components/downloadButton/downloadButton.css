@@ -1,0 +1,24 @@
+* {
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    text-align: center;
+}
+
+.download {
+    margin: auto 0;
+    border: solid 1px blue;
+    background-color: cornflowerblue;
+    color: white;
+    padding: 1em;
+}
+
+.download:active {
+    background-color: white;
+    color: cornflowerblue;
+}
