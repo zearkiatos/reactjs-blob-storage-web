@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    container_name: reactjs-blob-storage-web
+    volumes:
+      - ".:/app"
+    env_file:
+      - .env.dev
+    ports:
+      - "3001:3000"
+    tty: true
+    depends_on:
+      - api
+      - storage
+    links:
+      - api
+      - storage
+  api:
+    env_file: 
+      - ../express-blob-storage-api/.env.dev
+    build:
+      context: .
+      dockerfile: ../express-blob-storage-api/dev.Dockerfile
+    container_name: express-blob-storage-api
+    volumes: 
+      - "../express-blob-storage-api/.:/usr/src/app"
+    ports:
+      - "8001:8000"
+    depends_on:
+      - storage
+    links:
+      - storage
+  storage:
+    container_name: azure-storage
+    command: azurite-blob --blobHost 0.0.0.0 --blobPort 10000
+    hostname: azure-storage
+    env_file:
+      - ../express-blob-storage-api/.env.storage
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    volumes:
+      - "../express-blob-storage-api/storage:/data"
